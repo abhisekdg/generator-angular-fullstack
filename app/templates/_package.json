@@ -95,19 +95,20 @@
     "grunt-contrib-jshint": "~0.11.2",
     "grunt-contrib-uglify": "^0.9.1",
     "grunt-contrib-watch": "~0.6.1",<% if (filters.jade) { %>
-    "grunt-contrib-jade": "^0.15.0",<% } %><% if (filters.less) { %>
+    "grunt-contrib-jade": "^0.15.0",
+    "karma-ng-jade2js-preprocessor": "^0.2.0",<% } %><% if (filters.less) { %>
     "grunt-contrib-less": "^1.0.0",<% } %><% if(filters.babel) { %>
     "karma-babel-preprocessor": "^5.2.1",<% } %>
     "grunt-babel": "~5.0.0",
     "grunt-google-cdn": "~0.4.0",
-    "grunt-jscs": "^2.0.0",
+    "grunt-jscs": "^2.1.0",
     "grunt-newer": "^1.1.1",
     "grunt-ng-annotate": "^1.0.1",
     "grunt-ng-constant": "^1.1.0",
     "grunt-filerev": "^2.3.1",
     "grunt-usemin": "^3.0.0",
     "grunt-env": "~0.4.1",
-    "grunt-node-inspector": "^0.2.0",
+    "grunt-node-inspector": "^0.4.1",
     "grunt-nodemon": "^0.4.0",
     "grunt-angular-templates": "^0.5.4",
     "grunt-dom-munger": "^3.4.0",
@@ -129,6 +130,8 @@
     "connect-livereload": "^0.5.3",
     "mocha": "^2.2.5",
     "istanbul": "^0.3.17",
+    "chai": "^3.2.0",
+    "sinon": "^1.16.1",
     "chai-as-promised": "^5.1.0",
     "chai-things": "^0.2.0",
     "sinon-chai": "^2.8.0",<% if (filters.mocha) { %>
@@ -142,11 +145,11 @@
     "karma-firefox-launcher": "~0.1.6",
     "karma-script-launcher": "~0.1.0",
     "karma-html2js-preprocessor": "~0.1.0",
-    "karma-ng-jade2js-preprocessor": "^0.2.0",
     "karma-chrome-launcher": "~0.2.0",
     "requirejs": "~2.1.11",
     "karma-requirejs": "~0.2.2",
     "karma-jade-preprocessor": "0.0.11",
+    "phantomjs": "^1.9.18",
     "karma-phantomjs-launcher": "~0.2.0",
     "karma": "~0.13.3",
     "karma-ng-html2js-preprocessor": "~0.1.2",
