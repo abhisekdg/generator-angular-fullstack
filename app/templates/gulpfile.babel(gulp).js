@@ -281,17 +281,6 @@ gulp.task('test:server', cb => {
         cb);
 });
 
-gulp.task('test:server', () => {
-    process.env.NODE_ENV = 'test';
-    return gulp.src(paths.server.test)
-        .pipe(plugins.mocha({
-            reporter: 'spec',
-            require: [
-                './mocha.conf'
-            ]
-        }));
-});
-
 gulp.task('mocha:unit', () => {
     return gulp.src(paths.server.test)
         .pipe(plugins.mocha({
