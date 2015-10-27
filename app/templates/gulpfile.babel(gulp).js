@@ -68,7 +68,7 @@ function onServerLog(log) {
 function checkAppReady(cb) {
     var options = {
         host: 'localhost',
-        port: config.port,
+        port: config.port
     };
     http
         .get(options, () => cb(true))
@@ -80,7 +80,7 @@ function whenServerReady(cb) {
     var serverReady = false;
     var appReadyInterval = setInterval(() =>
         checkAppReady((ready) => {
-            if(!ready || serverReady) {
+            if (!ready || serverReady) {
                 return;
             }
             clearInterval(appReadyInterval);
@@ -124,6 +124,32 @@ let transpile = lazypipe()
     .pipe(plugins.sourcemaps.write, '.');<% } %>
 
 /********************
+ * Env
+ ********************/
+
+gulp.task('env:all', () => {
+    let localConfig;
+    try {
+        localConfig = require('./server/config/local.env');
+    } catch (e) {
+        localConfig = {};
+    }
+    plugins.env({
+        vars: localConfig
+    });
+});
+gulp.task('env:test', () => {
+    plugins.env({
+        vars: {NODE_ENV: 'test'}
+    });
+});
+gulp.task('env:prod', () => {
+    plugins.env({
+        vars: {NODE_ENV: 'production'}
+    });
+});
+
+/********************
  * Tasks
  ********************/
 
@@ -135,8 +161,8 @@ gulp.task('inject:js', () => {
     return gulp.src(paths.client.mainView)
         .pipe(plugins.inject(
             gulp.src(_.union(paths.client.scripts, ['!client/**/*.spec.<%= scriptExt %>']), {read: false})
-                .pipe(plugins.sort())
-            , {
+                .pipe(plugins.sort()),
+            {
                 starttag: '<!-- injector:js -->',
                 endtag: '<!-- endinjector -->',
                 transform: (filepath) => '<script src="' + filepath.replace('/client/', '') + '"></script>'
@@ -148,8 +174,8 @@ gulp.task('inject:css', () => {
     return gulp.src(paths.client.mainView)
         .pipe(plugins.inject(
             gulp.src('/client/**/*.css', {read: false})
-                .pipe(plugins.sort())
-            , { 
+                .pipe(plugins.sort()),
+            {
                 starttag: '<!-- injector:css -->',
                 endtag: '<!-- endinjector -->',
                 transform: (filepath) => '<link rel="stylesheet" href="' + filepath.replace('/client/', '').replace('/.tmp/', '') + '">'
@@ -161,8 +187,8 @@ gulp.task('inject:<%= styleExt %>', () => {
     return gulp.src('client/app/app.<%= styleExt %>')
         .pipe(plugins.inject(
             gulp.src(_.union(paths.client.styles, ['!' + paths.client.mainStyle]), {read: false})
-                .pipe(plugins.sort())
-            , {
+                .pipe(plugins.sort()),
+            {
                 starttag: '// injector',
                 endtag: '// endinjector',
                 transform: (filepath) => {
@@ -289,7 +315,7 @@ gulp.task('mocha:unit', () => {
                 './mocha.conf'
             ]
         }))
-        .once('end', function () {
+        .once('end', function() {
             process.exit();
         });
 });
@@ -380,7 +406,10 @@ gulp.task('build:client', ['transpile:client', 'styles', 'html'], () => {
                 .pipe(plugins.uglify())
             .pipe(jsFilter.restore())
             .pipe(cssFilter)
-                .pipe(plugins.minifyCss({cache: true, processImportFrom: ['!fonts.googleapis.com']}))
+                .pipe(plugins.minifyCss({
+                    cache: true,
+                    processImportFrom: ['!fonts.googleapis.com']
+                }))
             .pipe(cssFilter.restore())
             .pipe(plugins.rev())
         .pipe(assets.restore())
@@ -390,7 +419,7 @@ gulp.task('build:client', ['transpile:client', 'styles', 'html'], () => {
         .pipe(gulp.dest(paths.dist + '/client'));
 });
 
-gulp.task('html', function () {
+gulp.task('html', function() {
     return gulp.src('client/{app,components}/**/*.html')
         .pipe(plugins.angularTemplatecache({
             module: '<%= scriptAppName %>'
@@ -404,15 +433,16 @@ gulp.task('jade', function() {
 });<% } %>
 
 gulp.task('constant', function() {
-  var config = require('./server/config/environment/shared');
+  let sharedConfig = require('./server/config/environment/shared');
   plugins.ngConstant({
     name: '<%= scriptAppName %>.constants',
     deps: [],
     wrap: true,
     stream: true,
-    constants: { appConfig: config },
-  }).pipe(plugins.rename({
-      basename: 'app.constant',
+    constants: { appConfig: sharedConfig }
+  })
+    .pipe(plugins.rename({
+      basename: 'app.constant'
     }))
     .pipe(gulp.dest('client/app/'))
 })
